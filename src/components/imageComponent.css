@@ -1,0 +1,26 @@
+.resized-image {
+    width: 320px;
+    height: 250px;
+}
+
+.card {
+    background-color: #d4a7ac;
+    width: 320px;
+}
+
+.chart-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.label-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    justify-content: center;
+    text-transform: uppercase;
+    font-weight: bold;
+}

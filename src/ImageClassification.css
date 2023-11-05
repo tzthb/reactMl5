@@ -1,0 +1,38 @@
+.dropzone {
+    size: 50px;
+    display: flex;
+    align-items: center;
+}
+
+.dropzone button {
+    margin-left: 10px;
+    background-color: #d4a7ac;
+
+}
+
+.dropzone button::active {
+    background-color: #d4a7ac;
+}
+
+.droppedImage {
+    display: flex;
+    align-items: center;
+}
+
+.droppedImage button {
+    margin-left: 10px;
+    background-color: #d4a7ac;
+}
+
+.droppedImage button::active {
+    background-color: #d4a7ac;
+}
+
+
+.image-row {
+    margin-left: 225px;
+    align-items: center;
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
