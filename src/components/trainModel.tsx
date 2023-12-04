@@ -34,9 +34,10 @@ function TrainModel() {
     const [showModelSummary, setShowModelSummary] = useState(false);
     const [numPoints, setNumPoints] = useState(50);
     const [variance, setVariance] = useState(0.1);
-
+    const [trainedModel, setTrainedModel] = useState(false);
     const run = async () => {
         setShowModelSummary(true);
+
         await trainTestModel();
     };
 
@@ -153,8 +154,6 @@ function TrainModel() {
     };
 
     async function trainTestModel() {
-        setShowModelSummary(false)
-
         const data = generateData(numPoints, variance);
 
         const scatterData = Array.from(data.x.dataSync()).map((x, i) => ({
@@ -174,6 +173,7 @@ function TrainModel() {
 
         await trainModel(model, inputs, labels, numEpochs).then(() => {
             console.log('Done Training');
+            setTrainedModel(true);
             testModel(model, scatterData, tensorData);
         });
     }
@@ -244,7 +244,7 @@ function TrainModel() {
                 pointRadius: 5,
             },
             {
-                label: 'Predicted Data',
+                label: 'Tested Predicted Data',
                 data: predictedPoints,
                 borderColor: 'rgba(255,99,132,1)',
                 pointBackgroundColor: 'rgba(255,99,132,1)',
@@ -369,7 +369,6 @@ function TrainModel() {
                     <Button variant="contained" style={{
                         width: '200px', backgroundColor: '#9a656b', color: 'white'
                     }} onClick={() => run()}>Train Model</Button>
-
                 </div>
                 {showModelSummary && (
                     <><div className="modelSummary">
@@ -397,13 +396,19 @@ function TrainModel() {
                                     ))}
                             </tbody>
                         </table>
-                    </div><div style={{
-                        display: 'flex', marginLeft: '200px', width: '350px', flexDirection: 'row', height: '350px', justifyContent: 'space-around'
-                    }}>
+                    </div>
+
+                        <div style={{
+                            display: 'flex', marginLeft: '200px', width: '350px', flexDirection: 'row', height: '350px', justifyContent: 'space-around'
+                        }}>
                             <Scatter data={data} options={options} />
                             <Scatter data={dataTrain} />
-                            <Scatter data={testData} options={options} />
-                        </div></>
+                            {trainedModel &&
+
+                                <Scatter data={testData} options={options} />}
+                        </div>
+
+                    </>
                 )}
             </div>
         </div>
