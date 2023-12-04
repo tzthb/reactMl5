@@ -1,0 +1,40 @@
+.ffnn {
+    display: flex;
+    margin-left: 50px;
+}
+
+.title {
+    font-size: 2em;
+    font-weight: bold;
+}
+
+.noise-variance {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1em;
+    gap: 20px;
+}
+
+.experiment {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 1em;
+    margin-right: 1em;
+    gap: 10px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.scatter {
+    margin-top: 1em;
+    width: 320px;
+    height: 250px;
+    margin-left: 50px;
+
+}

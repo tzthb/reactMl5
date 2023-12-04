@@ -7,42 +7,49 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.14",
     "@mui/material": "^5.14.14",
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
-    "@types/jest": "^27.5.2",
-    "@types/node": "^16.18.59",
-    "@types/react": "^18.2.31",
-    "@types/react-dom": "^18.2.14",
+    "@react-native-async-storage/async-storage": "~1.17.3",
+    "@tensorflow-models/pose-detection": "2.0.0",
+    "@tensorflow/tfjs": "3.18.0",
+    "@tensorflow/tfjs-react-native": "0.8.0",
+    "@tensorflow/tfjs-vis": "^1.5.1",
+    "chart.js": "^4.4.0",
     "ml5": "^0.12.2",
-    "p5": "^1.7.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react": "18.0.0",
+    "react-chartjs-2": "^5.2.0",
+    "react-dom": "18.0.0",
     "react-dropzone": "^14.2.3",
     "react-gauge-chart": "^0.4.1",
-    "react-ml5": "^0.1.0",
-    "react-p5": "^1.4.1",
-    "react-p5-wrapper": "^4.1.2",
+    "react-native": "0.69.3",
+    "react-native-fs": "2.14.1",
+    "react-native-gesture-handler": "~2.5.0",
+    "react-native-svg": "12.3.0",
     "react-pro-sidebar": "^1.1.0-alpha.1",
-    "react-router-dom": "^6.17.0",
+    "react-router-dom": "^6.19.0",
+    "typescript": "^5.2.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@expo/webpack-config": "^0.15.0",
+    "@types/react": "^18.2.37",
+    "@types/react-native": "~0.64.3",
+    "babel-preset-expo": "~8.3.0",
+    "jest-expo": "~41.0.0",
     "react-scripts": "^5.0.1",
-    "typescript": "^4.9.5",
-    "uuid": "^9.0.1",
-    "web-vitals": "^2.1.4"
+    "typescript": "~4.0.0"
+  },
+  "jest": {
+    "preset": "react-native"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-      "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "build-dep": "cd ../../../tfjs/tfjs-react-native && yarn build-npm",
+    "copy-dep": "rm -rf node_modules/@tensorflow/tfjs-react-native/dist/* && cp -rf ../../../tfjs/tfjs-react-native/dist/* node_modules/@tensorflow/tfjs-react-native/dist/"
   },
   "browserslist": {
     "production": [
@@ -55,9 +62,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/react-gauge-chart": "^0.4.2",
-    "netlify-cli": "^17.0.1"
   }
 }

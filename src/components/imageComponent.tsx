@@ -1,5 +1,5 @@
-import { Avatar, Card, CardActionArea, CardContent, CardMedia, CircularProgress } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Avatar, Card, CardContent, CardMedia, CircularProgress } from '@mui/material';
+import React, { useCallback, useEffect, useState } from 'react';
 import Chart from './Charts';
 import * as ml5 from 'ml5';
 import './imageComponent.css';
@@ -18,7 +18,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ img, id }) => {
         console.log('Model Loaded!');
     }
 
-    const classifyImage = async () => {
+    const classifyImage = useCallback(async () => {
         setLoading(true);
         console.log('Classifying image...' + id);
         try {
@@ -40,16 +40,16 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ img, id }) => {
             console.log(predictions);
             setLoading(false);
         }
-    };
+    }, [setLoading, setPredictions]);
 
-    const handleClick = async () => {
+    const handleClick = useCallback(async () => {
         setShowDetails(!showDetails);
         await classifyImage();
-    };
+    }, [showDetails, classifyImage]);
 
     useEffect(() => {
         classifyImage();
-    }, [img, id]);
+    }, [img, id, classifyImage]);
 
     if (!showDetails) {
         // If showDetails is false, render a small avatar
