@@ -277,10 +277,14 @@ function TrainModel() {
         <div>
             <div style={{
                 width: '100%',
-                display: 'flex', marginLeft: '200px', marginTop: '50px', flexDirection: 'column', justifyContent: 'space-around'
+                display: 'flex', marginLeft: '50px', marginTop: '50px', flexDirection: 'column', justifyContent: 'space-around'
             }}>
+                <h1>Train Model</h1>
+                <div>Here you can train a neural network model with configurable hyperparameters.</div>
+                <br />
                 <div className="createModel" style={{
                     width: '100%',
+                    marginLeft: '200px',
                     display: 'flex',
                     flexDirection: 'row',
                     flexWrap: 'wrap',
@@ -310,6 +314,7 @@ function TrainModel() {
                     width: '100%',
                     display: 'flex',
                     flexDirection: 'row',
+                    marginLeft: '200px',
                     flexWrap: 'wrap',
                     gap: '10px',
                     alignItems: 'center',
@@ -342,6 +347,7 @@ function TrainModel() {
                     width: '100%',
                     display: 'flex',
                     flexDirection: 'row',
+                    marginLeft: '200px',
                     flexWrap: 'wrap',
                     gap: '10px',
                     alignItems: 'center',
@@ -363,6 +369,7 @@ function TrainModel() {
                 <div className="trainModel" style={{
                     display: 'flex',
                     marginTop: '10px',
+                    marginLeft: '200px',
                     alignItems: 'center',
                     textAlign: 'center'
                 }} >

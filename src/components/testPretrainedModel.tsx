@@ -93,6 +93,8 @@ function TestPretrainedModel() {
     return (
         <div style={{ textAlign: 'center' }}>
             <h1>Upload and Test a Model</h1>
+            <div>Upload a pretrained model and test it with new data.</div>
+            <br />
             <div style={{ display: 'flex', flexDirection: 'column', flexWrap: 'wrap', justifyContent: 'center', marginLeft: '150px' }}>
                 <input type="file" ref={fileInputRef} onChange={handleUpload} />
             </div>

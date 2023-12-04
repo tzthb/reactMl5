@@ -266,7 +266,9 @@ function PredictWith2d() {
 
     return (
         <div>
-            <h2>Detailed Model Summary</h2>
+            <h1>Pretrained Model</h1>
+            <div>Here a preconfigured model is trained and tested</div>
+            <h2>Training Performance</h2>
             <div style={{
                 display: 'flex', marginTop: '100px', marginLeft: '50px', flexDirection: 'row',
             }}>
