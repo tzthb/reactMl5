@@ -35,8 +35,8 @@ function App() {
             <MenuItem component={<Link to="docs" className="link" />} icon={<InfoIcon />}> Docs </MenuItem>
           </SubMenu>
           <SubMenu icon={<BatchPredictionIcon />} label="Regression FFNN">
-            <MenuItem component={<Link to="predictionsFrom2d" className="link" />} icon={<SsidChart />}> Making Predictions from 2d data </MenuItem>
-            <MenuItem component={<Link to="regressionFFnn" className="link" />} icon={<LegendToggleIcon />}> Regression</MenuItem>
+            <MenuItem component={<Link to="regressionFFnn" className="link" />} icon={<LegendToggleIcon />}>EA2: Regression</MenuItem>
+            <MenuItem component={<Link to="predictionsFrom2d" className="link" />} icon={<SsidChart />}>Tutorial: Making Predictions from 2d data </MenuItem>
             <MenuItem component={<Link to="docsRegression" className="link" />} icon={<InfoIcon />}> Docs </MenuItem>
           </SubMenu>
         </Menu>

@@ -8,6 +8,7 @@ import PredictWith2d from "./components/predictWith2d";
 import TestPretrainedModel from "./components/testPretrainedModel";
 import { Box, Tab, Tabs, } from "@mui/material";
 import TrainModel from "./components/trainModel";
+import Underfitting from "./components/underfitting";
 Chart.register(CategoryScale);
 
 const RegressionFFNN: React.FC = () => {
@@ -161,8 +162,8 @@ const RegressionFFNN: React.FC = () => {
                     aria-label="secondary tabs example"
                 >
                     <Tab value="UploadPretrainedModel" label="Upload Pretrained Model" />
-                    <Tab value="TrainModel" label="Train Model" />
-                    <Tab value="TestPretrainedModel" label="Test Pretrained Model" />
+                    <Tab value="TrainModel" label="Pretrained Model" />
+                    <Tab value="TestPretrainedModel" label="Train Your own Model" />
 
                 </Tabs>
 

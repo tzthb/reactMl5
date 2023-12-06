@@ -67,6 +67,7 @@ function TrainModel() {
         // Add hidden layers
         for (let i = 0; i < numHiddenLayers; i++) {
             model.add(tf.layers.dense({ units: numNeuronsPerLayer, useBias: true, activation: activationFunction }));
+            model.add(tf.layers.batchNormalization());
         }
 
         // Add output layer
@@ -197,24 +198,6 @@ function TrainModel() {
         return layers;
     }
 
-    const data = {
-        datasets: [
-            {
-                label: 'Dataset',
-                data: scatterData,
-                backgroundColor: 'rgba(75,192,192,0.4)',
-                pointBorderColor: 'rgba(75,192,192,1)',
-                pointBackgroundColor: '#fff',
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
-                pointHoverBorderColor: 'rgba(220,220,220,1)',
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-            }
-        ]
-    };
     const dataTrain = {
         datasets: [
             {
@@ -235,6 +218,20 @@ function TrainModel() {
     };
     const testData = {
         datasets: [
+            {
+                label: 'Noised Data',
+                data: scatterData,
+                backgroundColor: 'rgba(75,192,192,0.4)',
+                pointBorderColor: 'rgba(75,192,192,1)',
+                pointBackgroundColor: '#fff',
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: 'rgba(75,192,192,1)',
+                pointHoverBorderColor: 'rgba(220,220,220,1)',
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+            },
             {
                 label: 'Original Data',
                 data: originalPoints,
@@ -280,7 +277,7 @@ function TrainModel() {
                 display: 'flex', marginLeft: '50px', marginTop: '50px', flexDirection: 'column', justifyContent: 'space-around'
             }}>
                 <h1>Train Model</h1>
-                <div>Here you can train a neural network model with configurable hyperparameters.</div>
+                <div>Here you can train a neural network model with configurable hyperparameters. For each layer is a batchNormalization added automatically.</div>
                 <br />
                 <div className="createModel" style={{
                     width: '100%',
@@ -295,11 +292,11 @@ function TrainModel() {
                     <FormControl style={{ width: '150px', marginTop: '10px', marginRight: '1px', boxSizing: 'border-box' }}>
                         <InputLabel>Num Data Points</InputLabel>
                         <Select value={numPoints} onChange={e => setNumPoints(Number(e.target.value))}>
-                            <MenuItem value={5}>5</MenuItem>
-                            <MenuItem value={10}>10</MenuItem>
                             <MenuItem value={20}>20</MenuItem>
                             <MenuItem value={50}>50</MenuItem>
                             <MenuItem value={100}>100</MenuItem>
+                            <MenuItem value={500}>500</MenuItem>
+                            <MenuItem value={1000}>1000</MenuItem>
                         </Select>
                     </FormControl>
                     <FormControl style={{ width: '150px', marginTop: '10px', marginRight: '1px', boxSizing: 'border-box' }}>
@@ -408,7 +405,6 @@ function TrainModel() {
                         <div style={{
                             display: 'flex', marginLeft: '200px', width: '350px', flexDirection: 'row', height: '350px', justifyContent: 'space-around'
                         }}>
-                            <Scatter data={data} options={options} />
                             <Scatter data={dataTrain} />
                             {trainedModel &&
 

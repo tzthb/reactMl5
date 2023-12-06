@@ -1,17 +1,23 @@
+import { Paper, Typography, Grid } from '@mui/material';
 import React from 'react';
 
 const DocumentationSection = ({ title, content }) => {
     return (
-        <div style={sectionStyle}>
-            <h2 style={titleStyle}>{title}</h2>
-            <ul style={listStyle}>
+        <Paper elevation={3} style={{
+            padding: '20px', marginTop: '20px',
+            background: '#fcebeb'
+        }}>
+            <Typography variant="h4" gutterBottom>
+                {title}
+            </Typography>
+            <Grid container spacing={2}>
                 {content.map((item, index) => (
-                    <li key={index} style={listItemStyle}>
-                        {item}
-                    </li>
+                    <Grid item xs={12} key={index}>
+                        <Typography>{item}</Typography>
+                    </Grid>
                 ))}
-            </ul>
-        </div>
+            </Grid>
+        </Paper>
     );
 };
 
