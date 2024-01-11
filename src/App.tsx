@@ -14,6 +14,9 @@ import BatchPredictionIcon from '@mui/icons-material/BatchPrediction';
 import LegendToggleIcon from '@mui/icons-material/LegendToggle';
 import RegressionFFNN from './RegressionFFNN';
 import DocsRegression from './DocsRegression';
+import WordPredictionApp from './WordPredictionApp';
+import DocsWordPrediction from './DocsWordPrediction';
+import TranslateIcon from '@mui/icons-material/Translate';
 
 function App() {
 
@@ -39,6 +42,10 @@ function App() {
             <MenuItem component={<Link to="predictionsFrom2d" className="link" />} icon={<SsidChart />}>Tutorial: Making Predictions from 2d data </MenuItem>
             <MenuItem component={<Link to="docsRegression" className="link" />} icon={<InfoIcon />}> Docs </MenuItem>
           </SubMenu>
+          <SubMenu icon={<TranslateIcon />} label="Word Prediction">
+            <MenuItem component={<Link to="wordPrediction" className="link" />} icon={<TranslateIcon />}>EA3: WordPrediction</MenuItem>
+            <MenuItem component={<Link to="docsWordPrediction" className="link" />} icon={<InfoIcon />}> Docs </MenuItem>
+          </SubMenu>
         </Menu>
       </Sidebar>
       <section>
@@ -47,8 +54,10 @@ function App() {
           <Route path="imageClassification" element={<ImageClassification />} />
           <Route path="predictionsFrom2d" element={<PredictionsFrom2d />} />
           <Route path='regressionFFnn' element={<RegressionFFNN />} />
+          <Route path="wordPrediction" element={<WordPredictionApp />} />
           <Route path="docs" element={<Docs />} />
           <Route path="docsRegression" element={<DocsRegression />} />
+          <Route path="docsWordPrediction" element={<DocsWordPrediction />} />
 
 
         </Routes>
