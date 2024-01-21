@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Dropzone from 'react-dropzone';
 import './ImageClassification.css';
 import pig from './images/pig.jpg';
 import alpaka from './images/alpaka.png';
 import lion from './images/lion.jpg';
 import tiger2 from './images/tiger2.jpg';
+import gecco from './images/gecco.jpg';
 import elephant from './images/elefant.jpg';
 import dog from './images/dog.png';
 import wal from './images/wal.jpg';
@@ -20,6 +21,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 const ImageClassifier: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState(null);
     const [id, setId] = useState(null);
+    const [showDetails, setShowDetails] = useState(false);
 
     const dropzoneStyle: React.CSSProperties = {
         width: '300px',

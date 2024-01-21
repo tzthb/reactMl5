@@ -1,101 +1,152 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, List, ListItem, Typography, Select, MenuItem, SelectChangeEvent } from '@mui/material';
-import * as tf from "@tensorflow/tfjs";
-import { TextInput } from 'react-native-gesture-handler';
+import { TextField, Select, MenuItem, List, ListItem, SelectChangeEvent } from '@mui/material';
+import * as tf from '@tensorflow/tfjs';
 
 const WordPredictionApp = () => {
-    const [userInput, setUserInput] = useState('');
-    const [predictions, setPredictions] = useState([]);
-    let model: tf.LayersModel | null = null;
-    const [selectedModel, setSelectedModel] = useState('model1');
+    const [text, setText] = useState<string>('');
+    const [model, setModel] = useState<any>(null);
+    const [modelName, setModelName] = useState<string>('1');
+    const [wordSuggestions, setWordSuggestions] = useState<string[]>([]);
+    const [selectedWord, setSelectedWord] = useState<string | null>(null);
 
-
-    // Function to load the model
-    const loadModel = async (modelName: string) => {
-        model = await tf.loadLayersModel(`./src/trainedModells/${modelName}/${modelName}.json`);
+    const loadModel = async () => {
+        if (modelName === "1") return;
+        console.log('Load model' + modelName)
+        const loadedModel = await tf.loadLayersModel(
+            `https://strong-smakager-252635.netlify.app/${modelName}/${modelName}.json`
+        );
+        setModel(loadedModel);
+        loadedModel.summary()
     };
 
+    const loadTokenizer = async () => {
+        const response = await fetch(
+            `https://strong-smakager-252635.netlify.app/tokenizer/tokenizer${modelName}.json`
+        );
+        const tokenizer = await response.json();
+        console.log('Tokenizer loaded' + tokenizer.toString());
+        return tokenizer;
+    };
 
-    async function predict(inputTensor: tf.Tensor) {
-        if (model != null) {
-            throw new Error('Model not loaded');
+    // tokenize function to convert input text to list of tokenized segments
+    function tokenize(text, tokenizer) {
+        text = text.toLowerCase();
+        text = text.replace(/[!"#$%&()*+,-./:;<=>?@\[\\\]\^_`{|}~\t\n]/g, '')
+        var split_text = text.split(' ');
+        var tokens = [];
+        split_text.forEach(element => {
+            if (tokenizer[element] != undefined) {
+                tokens.push(tokenizer[element]);
+            }
+        });
+        // create a list of slices of the list of tokens
+        let i = 0;
+        const tokenized_text_segments = [];
+        while (i + 50 < Math.max(tokens.length, 100)) {
+            var new_slice = tokens.slice(i, i + 100);
+            while (new_slice.length < 100) {
+                new_slice.push(0);
+            }
+            tokenized_text_segments.push(new_slice);
+            i = i + 50;
         }
-
-        return model.predict(inputTensor);
+        return tokenized_text_segments;
     }
 
-    const handleModelChange = (event: any) => {
-        const modelName = event.target.value as string;
-        setSelectedModel(modelName);
-        loadModel(modelName);
-    };
-    const predictNextWords = async (text, model) => {
-        // Tokenize the input text (you might need a suitable tokenizer for your use case)
-        const tokens = text.split(' ');
 
-        // Preprocess the tokens (you might need to preprocess based on your model's requirements)
-        // Here, we convert the tokens to a numeric array for inference
-        const inputTensor = tf.tensor2d([tokens.map(token => parseFloat(token))]);
+    const predictNextWord = async () => {
+        const tokenizer = await loadTokenizer();
+        const tokenizedText = tokenize(text, tokenizer);
 
-        // Perform inference
-        const predictions = await predict(inputTensor);
-
-        // Clean up resources
-        inputTensor.dispose();
-        if (Array.isArray(predictions)) {
-            predictions.forEach(prediction => prediction.dispose());
-            // Convert the predictions to a JavaScript array
-            const predictionsArray = await Promise.all(predictions.map(prediction => prediction.arraySync()));
-            // Return the top 3 predictions
-            return Array.isArray(predictionsArray[0]) ? predictionsArray[0].slice(0, 3) : [];
-        } else {
-            predictions.dispose();
+        if (!tokenizedText) {
+            console.error('Die Eingabe konnte nicht tokenisiert werden.');
+            return;
         }
+
+        console.log(tokenizedText);
+        console.log(tokenizer.length);
+
+        const fakeWords = ['Nachmittag', 'wann', 'und', 'der'];  // Ersetzen Sie diese durch Ihre eigenen vorgetäuschten Wörter
+        setWordSuggestions(fakeWords);
+
+        try {
+            const inputTensor = tf.tensor2d(tokenizedText, [1, tokenizedText.length]);
+            const prediction = model.predict(inputTensor);
+            const predictedWord = prediction.dataSync()[0];  // Nehmen Sie das erste Element der Vorhersage
+            setWordSuggestions([predictedWord]);
+        } catch (error) {
+            console.error('Die Vorhersage ist fehlgeschlagen.', error);
+        }
+
     };
-    const updatePredictions = async () => {
-        if (selectedModel) {
-            // Call the function to predict the next words based on the selected model
-            const predictedWords = await predictNextWords(userInput, selectedModel);
-            setPredictions(predictedWords);
+
+    useEffect(() => {
+        loadModel();
+    }, [modelName]); // This will run every time modelName changes
+
+    const handleModelChange = (event: any) => {
+        const name = event.target.value;
+        setModelName(name);
+    };
+
+    const handleTextChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setText(event.target.value);
+    };
+
+    const handleWordSuggestionClick = (word: string) => {
+        setText((prevText) => prevText + ' ' + word);
+        setWordSuggestions([]);
+        setSelectedWord(null);
+    };
+
+    const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Tab' && wordSuggestions.length > 0) {
+            event.preventDefault();
+            setText((prevText) => prevText + ' ' + wordSuggestions[0]);
+            setWordSuggestions([]);
+            setSelectedWord(null);
         }
     };
 
     useEffect(() => {
-        // Call updatePredictions whenever the text input changes
-        if (model != null) {
-            updatePredictions();
+        if (text) {
+            predictNextWord();
         }
-    }, [userInput]);
+    }, [text]);
 
     return (
         <div style={{ padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'column' }}>
             <h1>Wortvorhersage mit TensorFlow.js</h1>
-            <Select value={selectedModel} onChange={handleModelChange}>
+            <h5>Hinweis: Das Modell wird zwar geladen, aber die Prediction ist nicht Fehlerfrei. Deswegen wird eine Dummy-Liste angezeigt, um die Funktion zu demonstrieren. Das Laden der Modelle wird in der Console dokumentiert.</h5>
+            <Select value={modelName} onChange={handleModelChange}>
+                <MenuItem value="1">Bitte wählen Sie ein Modell aus</MenuItem>
                 <MenuItem value="ffnn">FFNN</MenuItem>
                 <MenuItem value="rnn">RNN</MenuItem>
-                {/* Add more models as needed */}
             </Select>
 
-            <TextField
-                multiline
-                rows={4}
-                fullWidth
-                placeholder="Geben Sie hier Ihren Text ein..."
-                value={userInput}
-                onChange={(e) => setUserInput(e.target.value)}
-                style={{ marginBottom: '20px' }}
-            />
+            <div style={{ padding: '20px', textAlign: 'center', display: 'flex', flexDirection: 'row' }}>
+                <TextField
+                    multiline
+                    rows={4}
+                    fullWidth
+                    placeholder="Geben Sie hier Ihren Text ein..."
+                    style={{ marginBottom: '20px', width: '50%', marginRight: '20px', marginTop: '20px' }}
+                    value={text}
+                    onChange={handleTextChange}
+                    onKeyDown={handleKeyDown}
+                />
 
-            <div style={{ marginBottom: '20px' }}>
-                <h4>Vorschläge für das nächste Wort:</h4>
-                <List>
-                    {predictions.map((word, index) => (
-                        <ListItem key={index}>{word}</ListItem>
-                    ))}
-                </List>
-            </div>
-
-        </div>
+                <div>
+                    <h5>Clicken sie ein Wort an oder drücken sie Tab</h5>
+                    <List>
+                        {wordSuggestions.map((word, index) => (
+                            <ListItem key={index} onClick={() => handleWordSuggestionClick(word)}>
+                                {word}
+                            </ListItem>
+                        ))}
+                    </List>
+                </div>
+            </div></div>
     );
 };
 
